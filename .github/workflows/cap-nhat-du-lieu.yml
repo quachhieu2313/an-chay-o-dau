@@ -1,0 +1,40 @@
+name: Cập nhật dữ liệu quán và ảnh
+
+# Chạy tay (Actions -> Cập nhật dữ liệu quán và ảnh -> Run workflow) hoặc tự động mỗi thứ Hai.
+# Máy chủ GitHub mở được nhiều website quán hơn mạng công ty, nên lấy được nhiều ảnh đại diện hơn.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 20 * * 0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cap-nhat-du-lieu
+  cancel-in-progress: false
+
+jobs:
+  cap-nhat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Tải danh sách quán từ OpenStreetMap
+        run: python scripts/tai_du_lieu_osm.py
+      - name: Lấy ảnh đại diện từ website của quán
+        run: python scripts/tai_anh_quan.py
+      - name: Ghi lại nếu có thay đổi
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/quan.json data/anh_quan.json
+          if git diff --cached --quiet; then
+            echo "Không có thay đổi."
+          else
+            git commit -m "Cập nhật dữ liệu quán và ảnh $(date -u +%d/%m/%Y)"
+            git push
+          fi

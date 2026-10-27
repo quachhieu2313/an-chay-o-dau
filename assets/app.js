@@ -32,6 +32,25 @@
     return r.json();
   }
 
+  const taiAnhQuan = () => taiJson('data/anh_quan.json').then(d => d.anh || {}).catch(() => ({}));
+  const EMOJI_QUAN = {'Nhà hàng': '🍽️', 'Quán ăn nhanh': '🍜', 'Quán cà phê': '☕', 'Khu ẩm thực': '🥢', 'Kem / tráng miệng': '🍨', 'Tiệm bánh': '🥐', 'Cửa hàng': '🛍️'};
+  const EMOJI_MON = {'Món nước': '🍜', 'Món cơm': '🍚', 'Món cuốn - gỏi': '🥬', 'Món chiên - xào': '🥘', 'Món mặn': '🍲', 'Món canh': '🥣', 'Món lẩu - nướng': '🍢',
+    'Món ăn vặt': '🥟', 'Món ăn sáng': '🍙', 'Tráng miệng': '🍮', 'Món ăn nhanh': '🥖', 'Món ăn kèm': '🥢', 'Món khô': '🍝'};
+  // chỉ nhận ảnh do chính GitHub lưu (ảnh kéo thả vào Issue), tránh ảnh từ máy chủ lạ
+  const HOST_ANH_OK = /^https:\/\/(github\.com\/user-attachments\/|user-images\.githubusercontent\.com\/|private-user-images\.githubusercontent\.com\/|raw\.githubusercontent\.com\/)/;
+  const httpUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+  // khung ảnh có dự phòng: không có ảnh hoặc ảnh lỗi thì hiện biểu tượng
+  function khungAnh(src, bieuTuong) {
+    const box = h('div', {class: 'thumb ph'}, bieuTuong);
+    if (!src) return box;
+    const img = h('img', {src, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', decoding: 'async'});
+    img.addEventListener('error', () => { box.className = 'thumb ph'; clear(box).appendChild(document.createTextNode(bieuTuong)); });
+    box.className = 'thumb';
+    clear(box).appendChild(img);
+    return box;
+  }
+  const linkMxh = (v, goc) => { v = (v || '').trim().replace(/^@/, ''); return !v ? '' : /^https?:\/\//i.test(v) ? v : goc + v; };
+
   // ---------- review từ GitHub Issues đã duyệt (1 lần gọi API, cache 10 phút trong sessionStorage)
   function phanTichBody(body) {
     const kq = {};
@@ -42,7 +61,7 @@
     return kq;
   }
   async function taiReview() {
-    const khoa = 'chay-review-v1';
+    const khoa = 'chay-review-v2';
     try {
       const c = JSON.parse(sessionStorage.getItem(khoa) || 'null');
       if (c && Date.now() - c.t < 600000) return c.d;
@@ -56,8 +75,10 @@
       const id = (f['Mã quán'] || '').trim();
       const diem = parseInt((f['Điểm'] || '').trim()[0], 10);
       if (!id || !(diem >= 1 && diem <= 5)) return;
+      const anh = [];
+      String(f['Ảnh'] || '').replace(/!\[[^\]]*\]\((https:\/\/[^)\s]+)\)|src="(https:\/\/[^"\s]+)"/g, (m, a, b) => { const u = a || b; if (HOST_ANH_OK.test(u) && anh.length < 4) anh.push(u); return m; });
       (theoQuan[id] = theoQuan[id] || []).push({
-        diem, mon: f['Món đã ăn'] || '', noiDung: f['Nhận xét'] || '', ten: f['Tên hiển thị'] || 'Khách ẩn danh',
+        anh, diem, mon: f['Món đã ăn'] || '', noiDung: f['Nhận xét'] || '', ten: f['Tên hiển thị'] || 'Khách ẩn danh',
         ngay: new Date(i.created_at).toLocaleDateString('vi-VN'), link: i.html_url
       });
     });
@@ -69,7 +90,7 @@
 
   // ---------- trang chủ: danh sách + lọc
   async function trangChu() {
-    const [dl, rv] = await Promise.all([taiJson('data/quan.json'), taiReview().catch(() => null)]);
+    const [dl, rv, anhQ] = await Promise.all([taiJson('data/quan.json'), taiReview().catch(() => null), taiAnhQuan()]);
     const quan = dl.quan;
     const tp = [...new Set(quan.map(q => q.thanh_pho))].sort((a, b) => quan.filter(q => q.thanh_pho === b).length - quan.filter(q => q.thanh_pho === a).length);
     const loai = [...new Set(quan.map(q => q.loai))].sort();
@@ -99,7 +120,9 @@
       const luoi = clear($('#luoi'));
       kq.slice(dau, dau + S.size).forEach(x => {
         const ds = rv && rv[x.id];
+        const anhRv = (ds || []).flatMap(r => r.anh || [])[0];
         luoi.appendChild(h('article', {class: 'card'},
+          h('a', {href: 'quan.html?id=' + encodeURIComponent(x.id), 'aria-label': 'Xem ' + x.ten, tabindex: '-1'}, khungAnh((anhQ[x.id] && anhQ[x.id].url) || anhRv, EMOJI_QUAN[x.loai] || '🥗')),
           h('h3', {}, h('a', {href: 'quan.html?id=' + encodeURIComponent(x.id), text: x.ten})),
           h('div', {class: 'badges'}, h('span', {class: 'badge', text: x.loai}), x.chay_hoan_toan ? h('span', {class: 'badge', text: 'Chay hoàn toàn'}) : h('span', {class: 'badge warm', text: 'Có món chay'}),
             h('span', {class: 'badge gray', text: x.thanh_pho})),
@@ -122,7 +145,7 @@
   // ---------- trang chi tiết quán
   async function trangQuan() {
     const id = new URLSearchParams(location.search).get('id');
-    const [dl, rv] = await Promise.all([taiJson('data/quan.json'), taiReview().catch(() => null)]);
+    const [dl, rv, anhQ] = await Promise.all([taiJson('data/quan.json'), taiReview().catch(() => null), taiAnhQuan()]);
     const q = dl.quan.find(x => x.id === id);
     const goc = clear($('#noi-dung'));
     if (!q) { goc.appendChild(h('div', {class: 'note', text: 'Không tìm thấy quán này. Quay lại trang chủ để tìm lại.'})); return; }
@@ -132,6 +155,13 @@
     const hang = (k, v) => v ? [h('dt', {text: k}), h('dd', {}, v)] : [];
     goc.appendChild(h('h1', {text: q.ten}));
     goc.appendChild(h('div', {class: 'badges'}, h('span', {class: 'badge', text: q.loai}), q.chay_hoan_toan ? h('span', {class: 'badge', text: 'Chay hoàn toàn'}) : h('span', {class: 'badge warm', text: 'Có món chay'}), h('span', {class: 'badge gray', text: q.thanh_pho})));
+    const aq = anhQ[q.id];
+    if (aq && /^https:\/\//.test(aq.url)) {
+      goc.appendChild(h('figure', {class: 'anh', style: 'margin-top:14px'},
+        h('img', {src: aq.url, alt: 'Ảnh quán ' + q.ten, loading: 'lazy', referrerpolicy: 'no-referrer', onerror: e => e.target.closest('figure').remove()}),
+        h('figcaption', {}, 'Ảnh: ', httpUrl(aq.trang) ? h('a', {href: aq.trang, target: '_blank', rel: 'noopener nofollow', text: aq.nguon}) : aq.nguon, ' · bản quyền thuộc quán')));
+    }
+    const mxh = [['Website', httpUrl(q.website)], ['Fanpage Facebook', linkMxh(q.facebook, 'https://www.facebook.com/')], ['Instagram', linkMxh(q.instagram, 'https://www.instagram.com/')]].filter(x => httpUrl(x[1]));
     goc.appendChild(h('div', {class: 'panel info', style: 'margin-top:14px'},
       h('div', {}, h('dl', {class: 'kv'},
         hang('Địa chỉ', q.dia_chi || 'Chưa có địa chỉ chi tiết'),
@@ -141,7 +171,8 @@
         hang('Đánh giá', ds ? `${sao(trungBinh(ds))} ${trungBinh(ds).toFixed(1)}/5 (${ds.length} review)` : 'Chưa có review')),
         h('p', {style: 'margin-top:14px;display:flex;gap:8px;flex-wrap:wrap'},
           h('a', {class: 'btn small', target: '_blank', rel: 'noopener', href: `https://www.google.com/maps/dir/?api=1&destination=${q.lat},${q.lon}`, text: 'Chỉ đường'}),
-          h('a', {class: 'btn small sec', target: '_blank', rel: 'noopener', href: 'https://www.openstreetmap.org/' + loaiOsm(q.id), text: 'Xem / sửa thông tin trên OpenStreetMap'}))),
+          h('a', {class: 'btn small sec', target: '_blank', rel: 'noopener', href: 'https://www.openstreetmap.org/' + loaiOsm(q.id), text: 'Xem / sửa thông tin trên OpenStreetMap'})),
+        mxh.length ? h('div', {class: 'links', style: 'margin-top:10px'}, mxh.map(x => h('a', {class: 'btn small sec', target: '_blank', rel: 'noopener nofollow', href: x[1], text: x[0]}))) : null),
       h('iframe', {class: 'map', title: 'Bản đồ ' + q.ten, loading: 'lazy', src: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${q.lat},${q.lon}`})));
 
     goc.appendChild(h('h2', {text: 'Review của khách'}));
@@ -150,7 +181,8 @@
     else if (!ds) rvBox.appendChild(h('p', {class: 'muted', text: 'Chưa có review nào được duyệt cho quán này. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn!'}));
     else ds.forEach(r => rvBox.appendChild(h('div', {class: 'review'},
       h('div', {}, h('span', {class: 'who', text: r.ten}), ' ', h('span', {class: 'stars', text: sao(r.diem)}), h('span', {class: 'muted', text: ` · ${r.ngay}`})),
-      r.mon ? h('div', {class: 'muted', text: 'Món đã ăn: ' + r.mon}) : null, h('p', {text: r.noiDung}))));
+      r.mon ? h('div', {class: 'muted', text: 'Món đã ăn: ' + r.mon}) : null, h('p', {text: r.noiDung}),
+      r.anh.length ? h('div', {class: 'gallery'}, r.anh.map(u => h('a', {href: u, target: '_blank', rel: 'noopener'}, h('img', {src: u, alt: 'Ảnh của ' + r.ten, loading: 'lazy', referrerpolicy: 'no-referrer'})))) : null)));
     goc.appendChild(rvBox);
     goc.appendChild(h('p', {style: 'margin-top:14px'}, h('a', {class: 'btn', target: '_blank', rel: 'noopener', href: linkViet(q), text: 'Viết review cho quán này'}),
       h('span', {class: 'muted', style: 'margin-left:10px;font-size:14px', text: 'Cần tài khoản GitHub (miễn phí). Review hiện trên trang sau khi được duyệt.'})));
@@ -169,6 +201,9 @@
       $('#m-dem').textContent = `${vn(kq.length)} món`;
       const g = clear($('#m-luoi'));
       kq.forEach(m => g.appendChild(h('article', {class: 'card dish'},
+        khungAnh(m.anh && m.anh.tep, EMOJI_MON[m.loai] || '🥗'),
+        m.anh ? h('div', {class: 'meta', style: 'margin-top:-2px'}, (m.anh.chu_thich ? m.anh.chu_thich + ' · ' : '') + 'Ảnh: ', httpUrl(m.anh.trang) ? h('a', {href: m.anh.trang, target: '_blank', rel: 'noopener', text: m.anh.tac_gia || 'Wikimedia Commons'}) : (m.anh.tac_gia || ''),
+          ' · ', httpUrl(m.anh.giay_phep_url) ? h('a', {href: m.anh.giay_phep_url, target: '_blank', rel: 'noopener', text: m.anh.giay_phep}) : (m.anh.giay_phep || ''), ' · Wikimedia Commons') : null,
         h('h3', {text: m.ten}), h('div', {class: 'meta', text: `${m.loai} · ${m.vung}`}), h('p', {style: 'margin:0', text: m.mo_ta}),
         h('ul', {}, m.nguyen_lieu.map(n => h('li', {text: n}))),
         m.luu_y ? h('div', {class: 'note info-note', text: m.luu_y}) : null,

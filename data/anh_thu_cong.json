@@ -1,0 +1,6 @@
+{
+  "_ghi_chu": "Chỉnh tay ảnh quán. \"<id quán>\": null = bỏ ảnh tự động bị sai (logo, banner chữ). \"<id>\": {\"url\": \"https://...\", \"nguon\": \"Tên nguồn\", \"trang\": \"https://...\"} = thêm ảnh bạn có quyền dùng (do quán đồng ý hoặc ảnh bạn tự chụp). Chạy lại python scripts/tai_anh_quan.py để áp dụng.",
+  "n12692283090": null,
+  "n12594930882": null,
+  "n8724303924": null
+}

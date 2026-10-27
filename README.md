@@ -35,6 +35,17 @@ git add data/quan.json && git commit -m "Cập nhật dữ liệu quán" && git 
 
 Cần Python 3 và thư viện `requests`. Dữ liệu do cộng đồng OpenStreetMap nhập, © OpenStreetMap contributors (ODbL) - phải giữ dòng ghi nguồn trên trang.
 
+## Hình ảnh
+
+Chỉ dùng nguồn hợp lệ, **không cào ảnh từ Google Maps hay Facebook** (bản quyền của người chụp, điều khoản dịch vụ cấm lấy tự động):
+
+- **Món chay** (`assets/mon/`): ảnh từ Wikimedia Commons (giấy phép mở), tác giả và giấy phép hiện ngay dưới ảnh. Món chưa có ảnh chay đúng loại thì hiện biểu tượng, không dùng ảnh món mặn. Thêm ảnh: tải ảnh về `assets/mon/`, điền trường `anh` (tep, tac_gia, giay_phep, giay_phep_url, trang) cho món trong `data/mon_chay.json`.
+- **Quán** (`data/anh_quan.json`): ảnh đại diện lấy từ chính website của quán (ảnh xem trước khi chia sẻ link, bản quyền thuộc quán, trang ghi rõ nguồn) hoặc thẻ `image` của OpenStreetMap. Không tải ảnh về repo. Chạy `python scripts/tai_anh_quan.py`, hoặc chạy workflow **Cập nhật dữ liệu quán và ảnh** (Actions → Run workflow; máy chủ GitHub mở được nhiều website hơn mạng công ty). Sai ảnh (logo...) thì thêm `"<id quán>": null` vào `data/anh_thu_cong.json`; muốn thêm ảnh có sự cho phép của quán thì thêm `{"url","nguon","trang"}` vào cùng file.
+- **Ảnh của khách**: biểu mẫu review có ô "Ảnh" (kéo thả ảnh). Ảnh hiện trên trang quán sau khi review được duyệt; chỉ nhận ảnh do chính GitHub lưu (tối đa 4 ảnh mỗi review). Đây là nguồn ảnh quán bền vững nhất.
+- Trang quán còn có nút **Website / Fanpage Facebook / Instagram** (chỉ liên kết ra ngoài, không sao chép ảnh).
+
+Luôn xem lại ảnh tự động bằng mắt: từng có ảnh OpenStreetMap gắn nhầm logo của một cửa hàng thịt cho một quán chay.
+
 ## Giới hạn cần biết
 
 - Trang tĩnh nên không tự lưu review; dùng GitHub Issues làm nơi lưu, người viết cần tài khoản GitHub.

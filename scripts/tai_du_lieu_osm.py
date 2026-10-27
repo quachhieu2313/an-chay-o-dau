@@ -82,6 +82,8 @@ def main():
             "chay_hoan_toan": t.get("diet:vegetarian") == "only", "thanh_pho": thanh_pho(lat, lon, t), "dia_chi": dia_chi(t),
             "lat": round(lat, 6), "lon": round(lon, 6), "dien_thoai": t.get("phone") or t.get("contact:phone") or "",
             "website": t.get("website") or t.get("contact:website") or "", "gio_mo_cua": t.get("opening_hours", ""),
+            "facebook": t.get("contact:facebook") or t.get("facebook") or "", "instagram": t.get("contact:instagram") or t.get("instagram") or "",
+            "anh_osm": t.get("image", ""),
         })
     quan.sort(key=lambda q: (q["thanh_pho"], q["ten"].lower()))
     gio = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y")

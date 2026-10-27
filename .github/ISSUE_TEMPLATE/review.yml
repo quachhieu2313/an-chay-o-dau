@@ -44,6 +44,11 @@ body:
       description: Vị món ăn, giá, không gian, phục vụ, có đúng chay không...
     validations:
       required: true
+  - type: textarea
+    id: anh
+    attributes:
+      label: Ảnh
+      description: Tùy chọn. Kéo thả hoặc dán ảnh món ăn / quán vào ô này (tối đa 4 ảnh hiện trên trang). Chỉ đăng ảnh bạn tự chụp, không đăng ảnh thấy rõ mặt người khác.
   - type: input
     id: ten_hien_thi
     attributes:
