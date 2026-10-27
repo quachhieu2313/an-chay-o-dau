@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản đồ quán chay - Ăn Chay Ở Đâu</title>
+<meta name="theme-color" content="#2f6b3a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-trang="bando">
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html">🌿 Ăn Chay Ở Đâu</a>
+  <nav class="menu" aria-label="Menu chính">
+    <a href="index.html">Quán chay</a>
+    <a href="mon-chay.html">Món chay</a>
+    <a href="ban-do.html" aria-current="page">Bản đồ</a>
+    <a href="gioi-thieu.html">Giới thiệu</a>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <div id="loi" class="note hide" role="alert"></div>
+  <div class="bar" style="margin-bottom:12px">
+    <label>Khu vực<select id="b-tp"><option value="">Cả nước</option></select></label>
+    <label class="chk"><input type="checkbox" id="b-chay"> Chỉ quán chay hoàn toàn</label>
+    <span class="muted" id="b-dem" style="margin-left:auto"></span>
+  </div>
+  <p class="muted" style="margin:0 0 8px;font-size:14px"><span class="badge">● xanh</span> quán chay hoàn toàn &nbsp; <span class="badge warm">● cam</span> có món chay</p>
+  <div id="map-lon" class="map" role="region" aria-label="Bản đồ quán chay"></div>
+</div></main>
+<footer class="foot"><div class="wrap">Bản đồ nền và dữ liệu: © OpenStreetMap contributors.</div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

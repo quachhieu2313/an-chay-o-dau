@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ăn Chay Ở Đâu - Tìm quán chay, món chay và đọc review</title>
+<meta name="description" content="Danh sách quán ăn chay ở Việt Nam từ OpenStreetMap, gợi ý món chay phổ biến và review của khách đã được duyệt.">
+<meta name="theme-color" content="#2f6b3a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-trang="chu">
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html">🌿 Ăn Chay Ở Đâu</a>
+  <nav class="menu" aria-label="Menu chính">
+    <a href="index.html" aria-current="page">Quán chay</a>
+    <a href="mon-chay.html">Món chay</a>
+    <a href="ban-do.html">Bản đồ</a>
+    <a href="gioi-thieu.html">Giới thiệu</a>
+  </nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1>Ăn chay ở đâu, ăn món gì cho ngon?</h1>
+  <p>Tìm quán chay gần bạn, xem món chay phổ biến và đọc review thật từ người đã đến ăn.</p>
+  <div class="stats"><span id="stat-quan">…</span><span id="stat-tp">…</span><span id="stat-rv">…</span></div>
+</div></section>
+
+<main><div class="wrap">
+  <div id="loi" class="note hide" role="alert"></div>
+  <div class="bar">
+    <label style="flex:1">Tìm quán<input type="search" id="f-q" placeholder="Tên quán, đường, quận... (không cần dấu)"></label>
+    <label>Khu vực<select id="f-tp"><option value="">Tất cả</option></select></label>
+    <label>Loại hình<select id="f-loai"><option value="">Tất cả</option></select></label>
+    <label class="chk"><input type="checkbox" id="f-chay"> Chỉ quán chay hoàn toàn</label>
+    <label class="chk"><input type="checkbox" id="f-sdt"> Có số điện thoại</label>
+    <label class="chk"><input type="checkbox" id="f-rv"> Đã có review</label>
+  </div>
+  <div class="count" id="dem">Đang tải danh sách...</div>
+  <div class="grid" id="luoi"></div>
+  <div class="pager" id="pager"></div>
+</div></main>
+
+<footer class="foot"><div class="wrap">
+  <div id="nguon"></div>
+  <div>Thông tin quán do cộng đồng OpenStreetMap nhập nên có thể thiếu hoặc đã cũ - hãy gọi xác nhận trước khi đến. Review là ý kiến cá nhân của khách.</div>
+</div></footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Món chay phổ biến - Ăn Chay Ở Đâu</title>
+<meta name="description" content="Gợi ý các món chay phổ biến ở Việt Nam: phở chay, bún riêu chay, cơm tấm chay, gỏi cuốn chay... kèm nguyên liệu và lưu ý khi gọi món.">
+<meta name="theme-color" content="#2f6b3a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-trang="mon">
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html">🌿 Ăn Chay Ở Đâu</a>
+  <nav class="menu" aria-label="Menu chính">
+    <a href="index.html">Quán chay</a>
+    <a href="mon-chay.html" aria-current="page">Món chay</a>
+    <a href="ban-do.html">Bản đồ</a>
+    <a href="gioi-thieu.html">Giới thiệu</a>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <h1>Món chay phổ biến</h1>
+  <p class="muted">Giới thiệu chung từng món, không phải đánh giá một quán cụ thể. Bấm "Tìm quán bán món này" để xem quán và review.</p>
+  <div id="loi" class="note hide" role="alert"></div>
+  <div class="bar">
+    <label style="flex:1">Tìm món<input type="search" id="m-q" placeholder="Tên món, nguyên liệu... (không cần dấu)"></label>
+    <label>Vùng<select id="m-vung"><option value="">Tất cả</option></select></label>
+    <label>Loại món<select id="m-loai"><option value="">Tất cả</option></select></label>
+  </div>
+  <div class="count" id="m-dem"></div>
+  <div class="grid" id="m-luoi"></div>
+</div></main>
+<footer class="foot"><div class="wrap">Nội dung món ăn do chủ trang biên soạn, có thể sửa tại data/mon_chay.json.</div></footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

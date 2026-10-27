@@ -1,0 +1,58 @@
+name: Viết review quán chay
+description: Chia sẻ trải nghiệm ăn chay của bạn tại một quán
+title: "[Review] "
+labels: ["review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã chia sẻ! Review sẽ hiện trên trang sau khi được duyệt. Chỉ viết trải nghiệm thật của chính bạn, không đăng thông tin cá nhân của người khác.
+  - type: input
+    id: quan_id
+    attributes:
+      label: Mã quán
+      description: Tự điền khi bạn bấm "Viết review" từ trang quán - đừng sửa.
+    validations:
+      required: true
+  - type: input
+    id: ten_quan
+    attributes:
+      label: Tên quán
+    validations:
+      required: true
+  - type: dropdown
+    id: diem
+    attributes:
+      label: Điểm
+      options:
+        - "5 - Rất ngon, sẽ quay lại"
+        - "4 - Ngon"
+        - "3 - Tạm được"
+        - "2 - Chưa tốt"
+        - "1 - Không nên đến"
+    validations:
+      required: true
+  - type: input
+    id: mon_da_an
+    attributes:
+      label: Món đã ăn
+      description: Ví dụ "Hủ tiếu chay, chả giò chay"
+  - type: textarea
+    id: nhan_xet
+    attributes:
+      label: Nhận xét
+      description: Vị món ăn, giá, không gian, phục vụ, có đúng chay không...
+    validations:
+      required: true
+  - type: input
+    id: ten_hien_thi
+    attributes:
+      label: Tên hiển thị
+      description: Tên hoặc nickname hiện cạnh review. Để trống sẽ hiện "Khách ẩn danh".
+  - type: checkboxes
+    id: dong_y
+    attributes:
+      label: Xác nhận
+      options:
+        - label: Đây là trải nghiệm thật của tôi và tôi đồng ý hiển thị công khai review này.
+          required: true

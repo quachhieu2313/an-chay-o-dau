@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Giới thiệu và cách viết review - Ăn Chay Ở Đâu</title>
+<meta name="theme-color" content="#2f6b3a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-trang="gt">
+<header class="top"><div class="wrap">
+  <a class="logo" href="index.html">🌿 Ăn Chay Ở Đâu</a>
+  <nav class="menu" aria-label="Menu chính">
+    <a href="index.html">Quán chay</a>
+    <a href="mon-chay.html">Món chay</a>
+    <a href="ban-do.html">Bản đồ</a>
+    <a href="gioi-thieu.html" aria-current="page">Giới thiệu</a>
+  </nav>
+</div></header>
+<main><div class="wrap" style="max-width:780px">
+  <h1>Giới thiệu</h1>
+  <p><b>Ăn Chay Ở Đâu</b> là trang tĩnh giúp tìm quán ăn chay, làm quen với các món chay phổ biến và đọc review của người đã đến ăn. Trang không thu phí, không quảng cáo.</p>
+
+  <h2>Dữ liệu quán lấy từ đâu?</h2>
+  <p>Danh sách quán lấy từ <a href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap</a> (các địa điểm gắn nhãn <code>diet:vegetarian=only</code> hoặc ẩm thực chay), © OpenStreetMap contributors, giấy phép ODbL. Vì do cộng đồng nhập nên TP.HCM nhiều quán nhất, nhiều quán thiếu địa chỉ hoặc giờ mở cửa, và có thể có quán đã đóng. Bạn sửa được ngay trên OpenStreetMap bằng nút "Xem / sửa thông tin" ở trang từng quán; lần cập nhật dữ liệu tới sẽ lấy bản mới.</p>
+
+  <h2>Cách viết review</h2>
+  <ol>
+    <li>Mở trang của quán, bấm <b>Viết review cho quán này</b>.</li>
+    <li>Trang GitHub hiện sẵn một biểu mẫu (cần tài khoản GitHub miễn phí). Chọn điểm 1-5 sao, ghi món đã ăn và nhận xét của bạn, rồi bấm <b>Submit new issue</b>.</li>
+    <li>Chủ trang đọc và gắn nhãn <code>da-duyet</code>; vài phút sau review hiện ở trang quán và tính vào điểm trung bình.</li>
+  </ol>
+  <div class="note info-note"><b>Nguyên tắc review:</b> chỉ viết trải nghiệm thật của chính bạn; không đăng thông tin cá nhân của người khác; không quảng cáo, không công kích. Review vi phạm sẽ không được duyệt. Ý kiến trong review là của người viết, không phải của trang.</div>
+
+  <h2>Mẹo khi ăn chay</h2>
+  <ul>
+    <li>Chay có nhiều kiểu: thuần chay (không trứng, sữa), chay có trứng sữa, chay không ngũ vị tân (hành, tỏi, kiệu, hẹ, nén). Hỏi quán nếu bạn kiêng.</li>
+    <li>Nước dùng, nước chấm, mắm là chỗ dễ lẫn đồ mặn - hỏi "mắm chay hay mắm thường?".</li>
+    <li>Gọi điện xác nhận giờ mở cửa; nhiều quán chay chỉ bán trưa hoặc đóng cửa ngày thường.</li>
+    <li>Ngày rằm, mùng một quán chay thường đông - đi sớm.</li>
+  </ul>
+
+  <h2>Chủ trang cập nhật thế nào?</h2>
+  <p>Chạy <code>python scripts/tai_du_lieu_osm.py</code> để tải lại danh sách quán, sửa món ăn ở <code>data/mon_chay.json</code>, rồi đẩy lên GitHub. Xem thêm README của dự án.</p>
+</div></main>
+<footer class="foot"><div class="wrap">© OpenStreetMap contributors cho dữ liệu địa điểm. Mã nguồn trang công khai trên GitHub.</div></footer>
+</body>
+</html>
